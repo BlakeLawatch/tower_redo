@@ -1,0 +1,8 @@
+version: '3'
+services:
+  app:
+    image: your-dockerhub-username/tower_redo:latest
+    env_file:
+      - tower_redo-env
+    ports:
+      - "3000:3000"
