@@ -1,10 +1,16 @@
-import mongoose from 'mongoose'
+import mongoose, { mongo } from 'mongoose'
 import { AccountSchema } from '../models/Account'
 import { ValueSchema } from '../models/Value'
+import { TowerEventSchema } from '../models/TowerEvent.js';
+import { TicketSchema } from '../models/Ticket.js';
 
 class DbContext {
   Values = mongoose.model('Value', ValueSchema);
   Account = mongoose.model('Account', AccountSchema);
+
+  TowerEvent = mongoose.model('TowerEvent', TowerEventSchema)
+
+  Ticket = mongoose.model('Ticket', TicketSchema)
 }
 
 export const dbContext = new DbContext()
