@@ -1,5 +1,5 @@
 <template>
-   <div v-for="towerEvent in towerEvents" :key="towerEvent" class="col-12 col-md-4">
+   <div v-for="towerEvent in towerEvents" :key="towerEvent" class="col-12 col-md-4 text-center">
         <img class="img-fluid event-img" :src="towerEvent.coverImg" alt="" :title="towerEvent.name">
 <p>{{ towerEvent.name }}</p>
       </div>
@@ -41,4 +41,5 @@ export default {
     height: 20vh;
     width: 25vh;
 }
+
 </style>

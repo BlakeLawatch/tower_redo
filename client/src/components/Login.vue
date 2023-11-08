@@ -18,9 +18,13 @@
                 Manage Account
               </div>
             </router-link>
-            <div class="list-group-item dropdown-item list-group-item-action">
-              Create Event
+            <div role="button" data-bs-toggle="modal" data-bs-target="#exampleModal" class="list-group-item dropdown-item list-group-item-action">
+             
+  Create Event
+
+              
             </div>
+            <CreateEventComponent />
             <div class="list-group-item dropdown-item list-group-item-action text-danger selectable" @click="logout">
               <i class="mdi mdi-logout"></i>
               logout
@@ -47,8 +51,11 @@ export default {
       async logout() {
         AuthService.logout({ returnTo: window.location.origin })
       }
+
+     
     }
-  }
+  },
+  components: { CreateEventComponent }
 }
 </script>
 
