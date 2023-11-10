@@ -12,9 +12,9 @@ class TowerEventsService{
 
     }
 
-    async createEvent(userInfo){
-        
-    }
+   async createEvent(userInfo){
+    const res = await api.create(`api/events`)
+   }
 }
 
 export const towerEventsService = new TowerEventsService()
