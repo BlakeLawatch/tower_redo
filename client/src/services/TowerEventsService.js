@@ -11,6 +11,10 @@ class TowerEventsService{
         logger.log('got mapped events!', res.data)
 
     }
+
+    async createEvent(userInfo){
+        
+    }
 }
 
 export const towerEventsService = new TowerEventsService()
