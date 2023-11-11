@@ -9,12 +9,16 @@ class TowerEventsService{
         const res = await api.get('api/events')
         AppState.towerEvents = res.data.map((pojo) => new TowerEvent(pojo))
         logger.log('got mapped events!', res.data)
-
     }
 
-   async createEvent(userInfo){
-    const res = await api.create(`api/events`)
-   }
+    async createEvent(eventData){
+        const res = await api.post('api/events', eventData)
+        logger.log('created an event', res.data)
+        const newEvent = new TowerEvent(res.data)
+        AppState.towerEvents.push(newEvent)
+        return newEvent
+
+    }
 }
 
 export const towerEventsService = new TowerEventsService()
