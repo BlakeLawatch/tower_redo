@@ -17,6 +17,12 @@ class TowerEventsService{
         const newEvent = new TowerEvent(res.data)
         AppState.towerEvents.push(newEvent)
         return newEvent
+    }
+
+    async getEventById(eventId){
+        const res = await api.get(`api/events/${eventId}`)
+        logger.log('getting event by id',res.data)
+        AppState.activeEvent = new TowerEvent(res.data)
 
     }
 }

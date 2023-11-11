@@ -90,10 +90,12 @@ import { AuthService } from '../services/AuthService'
 import { towerEventsService } from '../services/TowerEventsService'
 import { Modal } from 'bootstrap'
 import Pop from '../utils/Pop'
+import { useRouter } from 'vue-router'
 export default {
   setup() {
     const eventTypes = ['concert', 'convention', 'sport', 'digital']
     const editable = ref({})
+    const router = useRouter()
     return {
       eventTypes,
       editable,
@@ -109,11 +111,11 @@ export default {
       async createEvent() {
         try {
           const eventData = editable.value
-          await towerEventsService.createEvent(eventData)
+          const event = await towerEventsService.createEvent(eventData)
           Pop.success('you created an event')
           editable.value = {}
           Modal.getOrCreateInstance('#createEvent').hide()
-
+          router.push({ name: 'EventDetails', params: { eventId: event.id } })
         } catch (error) {
           Pop.error(error)
         }

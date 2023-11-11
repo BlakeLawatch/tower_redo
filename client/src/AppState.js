@@ -7,5 +7,8 @@ export const AppState = reactive({
   account: {},
   
   /** @type {import('./models/TowerEvent.js').TowerEvent []} */
-  towerEvents: []
+  towerEvents: [],
+  
+  /** @type {import('./models/TowerEvent.js').TowerEvent | null} */
+  activeEvent: null
 })
