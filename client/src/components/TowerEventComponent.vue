@@ -10,9 +10,7 @@
 
 
 <script>
-import { computed, onMounted } from 'vue';
-import { towerEventsService } from '../services/TowerEventsService';
-import Pop from '../utils/Pop';
+import { computed } from 'vue';
 import { AppState } from '../AppState';
 import { RouterLink, useRouter } from 'vue-router';
 import { TowerEvent } from '../models/TowerEvent';

@@ -40,6 +40,7 @@ export default {
 
         async function getEventById() {
             try {
+
                 const eventId = route.params.eventId
                 await towerEventsService.getEventById(eventId)
             } catch (error) {
