@@ -9,7 +9,7 @@ class TowerEventsService {
     }
 
     async getEventById(eventId) {
-        const getEvent = await dbContext.TowerEvent.findById(eventId)
+        const getEvent = (await dbContext.TowerEvent.findById(eventId)).populate('ticketCount')
         return getEvent
     }
 
