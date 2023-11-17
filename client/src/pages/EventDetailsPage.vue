@@ -37,7 +37,7 @@
                         </div>
                         <div class="col-8 py-3">
                             <p>{{ comment.body }}</p>
-                            <button @click="destroyComment()"
+                            <button v-if="comment.creatorId == account.id" @click="destroyComment(comment.id)"
                                 class="btn btn-outline-danger mdi mdi-delete-circle mt-1 text-end">Delete</button>
                         </div>
                     </div>
@@ -103,8 +103,16 @@ export default {
                 }
             },
 
-            async destroyComment() {
-
+            async destroyComment(commentId) {
+                try {
+                    const wantsToDelete = await Pop.confirm('you sure about that?')
+                    if (!wantsToDelete) {
+                        return
+                    }
+                    await commentsService.destroyComment(commentId)
+                } catch (error) {
+                    Pop.error(error)
+                }
             }
 
 
