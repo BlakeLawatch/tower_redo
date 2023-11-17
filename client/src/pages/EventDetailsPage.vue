@@ -23,6 +23,23 @@
                         <h4 v-if="activeEvent.ticketCount >= activeEvent.capacity">This event is cancelled</h4>
                         <!-- TODO ability to buy a ticket will go here -->
                         <h4 v-else>Buy a Ticket</h4>
+                        <button data-bs-toggle="modal" data-bs-target="#commentModal"
+                            class="btn btn-outline-success">Comment</button>
+                        <CommentModal />
+                    </div>
+                </section>
+                <section class="row">
+                    <div class="col-6 d-flex comment-card p-3 ms-2 my-2" v-for="comment in comments" :key="comment">
+                        <div class="col-4">
+                            <img class="rounded-circle img-fluid" :src="comment.creator.picture" alt=""
+                                :title="comment.creator.name">
+                            <p class="my-1"> {{ comment.creator.name }}</p>
+                        </div>
+                        <div class="col-8 py-3">
+                            <p>{{ comment.body }}</p>
+                            <button @click="destroyComment()"
+                                class="btn btn-outline-danger mdi mdi-delete-circle mt-1 text-end">Delete</button>
+                        </div>
                     </div>
                 </section>
             </div>
@@ -37,11 +54,13 @@ import Pop from '../utils/Pop';
 import { towerEventsService } from '../services/TowerEventsService';
 import { computed, onMounted } from 'vue';
 import { AppState } from '../AppState'
+import { commentsService } from '../services/CommentsService'
 
 export default {
     setup() {
         onMounted(() => {
             getEventById()
+            getCommentsByEventId()
         })
         const route = useRoute()
 
@@ -56,26 +75,39 @@ export default {
 
         }
 
+        async function getCommentsByEventId() {
+            try {
+                const eventId = route.params.eventId
+                await commentsService.getCommentsByEventId(eventId)
+            } catch (error) {
+                Pop.error(error)
+            }
+        }
+
         return {
             route,
             activeEvent: computed(() => AppState.activeEvent),
             account: computed(() => AppState.account),
+            comments: computed(() => AppState.comment),
 
             async cancelEvent() {
                 try {
-                    const cancelEvent = await Pop.confirm('Are you sure about that?')
+                    const cancelEvent = await Pop.confirm('You sure about that?')
                     if (!cancelEvent) {
                         return
                     }
                     const eventId = route.params.eventId
                     await towerEventsService.cancelEvent(eventId)
-
                 } catch (error) {
                     Pop.error(error)
                 }
+            },
 
+            async destroyComment() {
 
             }
+
+
 
         }
     }
@@ -87,5 +119,10 @@ export default {
 .img-cancelled {
     opacity: .33;
     border: thick double red;
+}
+
+.comment-card {
+    background-color: #80808073;
+    border-radius: 20px;
 }
 </style>

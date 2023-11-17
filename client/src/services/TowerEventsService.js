@@ -31,6 +31,7 @@ class TowerEventsService{
         logger.log('cancelling event', res.data)
         
     }
+
 }
 
 export const towerEventsService = new TowerEventsService()
