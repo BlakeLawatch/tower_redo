@@ -19,7 +19,6 @@ class CommentsService{
     async destroyComment(commentId){
         const res = await api.delete(`api/comments/${commentId}`)
         logger.log('deleted comment. STILL FINISH IN THE SERVER', res.data)
-        // AppState.comment = res.data new(Comment)
     }
 }
 

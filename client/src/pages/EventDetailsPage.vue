@@ -15,14 +15,16 @@
                     </div>
                     <div class="col-3">
                         <h4>{{ activeEvent.startDate.toLocaleDateString() }}</h4>
-                        <h4>{{ activeEvent.ticketCount }}</h4>
+                        <h4>Tickets sold: {{ activeEvent.ticketCount }}</h4>
+                        <h4>Total Capacity: {{ activeEvent.capacity }}</h4>
                         <h4>{{ activeEvent.type }}</h4>
                         <button v-if="activeEvent.creatorId == account.id && activeEvent.isCanceled == false"
                             @click="cancelEvent()" class="btn btn-outline-danger">Cancel Event</button>
                         <h4 v-if="activeEvent.isCanceled">This event is cancelled</h4>
                         <h4 v-if="activeEvent.ticketCount >= activeEvent.capacity">This event is cancelled</h4>
-                        <!-- TODO ability to buy a ticket will go here -->
-                        <h4 v-else>Buy a Ticket</h4>
+                        <h4 v-if="activeEvent.isCanceled || activeEvent.ticketCount >= activeEvent.capacity"> Can't buy a
+                            ticket</h4>
+                        <button @click="buyTicket()" v-else class="btn btn-outline-info">Purchase Ticket</button>
                         <button data-bs-toggle="modal" data-bs-target="#commentModal"
                             class="btn btn-outline-success">Comment</button>
                         <CommentModal />
@@ -55,6 +57,7 @@ import { towerEventsService } from '../services/TowerEventsService';
 import { computed, onMounted } from 'vue';
 import { AppState } from '../AppState'
 import { commentsService } from '../services/CommentsService'
+import { ticketsService } from '../services/TicketsService'
 
 export default {
     setup() {
@@ -110,6 +113,17 @@ export default {
                         return
                     }
                     await commentsService.destroyComment(commentId)
+                } catch (error) {
+                    Pop.error(error)
+                }
+            },
+
+            async buyTicket() {
+                try {
+                    const eventId = route.params.eventId
+                    await ticketsService.buyTicket(eventId)
+                    Pop.success('You purchased a ticket')
+                    this.activeEvent.ticketCount++
                 } catch (error) {
                     Pop.error(error)
                 }
