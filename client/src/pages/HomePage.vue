@@ -19,11 +19,13 @@ import TowerEventComponent from '../components/TowerEventComponent.vue';
 import { AppState } from '../AppState';
 import { towerEventsService } from '../services/TowerEventsService';
 import Pop from '../utils/Pop';
+import { logger } from '../utils/Logger';
 
 
 
 export default {
   setup() {
+    const eventType = ['concert', 'convention', 'sport', 'digital']
     onMounted(() => {
       getTowerEvents()
     })
@@ -36,7 +38,11 @@ export default {
       }
     }
     return {
-      towerEvents: computed(() => AppState.towerEvents)
+      towerEvents: computed(() => AppState.towerEvents),
+
+      async changeEventType() {
+        logger.log('eventType', eventType)
+      }
     };
   },
   components: { TowerEventComponent }

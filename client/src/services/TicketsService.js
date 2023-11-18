@@ -21,7 +21,13 @@ class TicketsService{
 
     async getAccountTickets(){
         const res = await api.get(`account/tickets`)
-        logger.log('got tickets FINISH IN THE SERVICE', res.data)
+        AppState.myTickets = res.data.map(pojo => new Ticket(pojo))
+        logger.log('got tickets FINISH IN THE SERVICE', AppState.myTickets)
+    }
+
+    async cancelTicket(ticketId){
+        await api.delete(`api/tickets/${ticketId}`)
+        AppState.myTickets.splice(0,1)
     }
 }
 

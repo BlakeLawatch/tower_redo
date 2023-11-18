@@ -3,6 +3,7 @@ export class Ticket{
         this.id = data.id
         this.eventId = data.eventId
         this.accountId = data.accountId
+        this.event = data.event
         this.createdAt = data.createdAt
         this.updatedAt = data.updatedAt
         this.profile = data.profile
