@@ -21,7 +21,7 @@
                         <button v-if="activeEvent.creatorId == account.id && activeEvent.isCanceled == false"
                             @click="cancelEvent()" class="btn btn-outline-danger">Cancel Event</button>
                         <h4 v-if="activeEvent.isCanceled">This event is cancelled</h4>
-                        <h4 v-if="activeEvent.ticketCount >= activeEvent.capacity">This event is cancelled</h4>
+                        <h4 v-if="activeEvent.ticketCount >= activeEvent.capacity">This event is sold out</h4>
                         <h4 v-if="activeEvent.isCanceled || activeEvent.ticketCount >= activeEvent.capacity"> Can't buy a
                             ticket</h4>
                         <button @click="buyTicket()" v-else class="btn btn-outline-info">Purchase Ticket</button>
@@ -30,8 +30,12 @@
                         <CommentModal />
                     </div>
                 </section>
+                <section v-for="ticket in tickets" :key="ticket.id">
+                    <img :src="ticket.profile.picture" alt="" :title="ticket.profile.name">
+                    <p> {{ ticket.profile.name }}</p>
+                </section>
                 <section class="row">
-                    <div class="col-6 d-flex comment-card p-3 ms-2 my-2" v-for="comment in comments" :key="comment">
+                    <div class="col-6 d-flex comment-card p-3 ms-2 my-2" v-for="comment in comments" :key="comment.id">
                         <div class="col-4">
                             <img class="rounded-circle img-fluid" :src="comment.creator.picture" alt=""
                                 :title="comment.creator.name">
@@ -41,6 +45,9 @@
                             <p>{{ comment.body }}</p>
                             <button v-if="comment.creatorId == account.id" @click="destroyComment(comment.id)"
                                 class="btn btn-outline-danger mdi mdi-delete-circle mt-1 text-end">Delete</button>
+                        </div>
+                        <div>
+
                         </div>
                     </div>
                 </section>
@@ -64,6 +71,7 @@ export default {
         onMounted(() => {
             getEventById()
             getCommentsByEventId()
+            getEventTickets()
         })
         const route = useRoute()
 
@@ -87,11 +95,22 @@ export default {
             }
         }
 
+        async function getEventTickets() {
+            try {
+                const eventId = route.params.eventId
+                await ticketsService.getEventTickets(eventId)
+            } catch (error) {
+                Pop.error(error)
+            }
+        }
+
         return {
             route,
             activeEvent: computed(() => AppState.activeEvent),
             account: computed(() => AppState.account),
             comments: computed(() => AppState.comment),
+            tickets: computed(() => AppState.tickets),
+
 
             async cancelEvent() {
                 try {
@@ -127,7 +146,8 @@ export default {
                 } catch (error) {
                     Pop.error(error)
                 }
-            }
+            },
+
 
 
 
