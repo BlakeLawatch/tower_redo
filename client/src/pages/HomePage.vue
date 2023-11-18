@@ -1,8 +1,10 @@
 <template>
   <div class="container-fluid">
     <section class="row">
-      <div class="col-12">
-        <h1 class="text-center">Filter Bar will go here</h1>
+      <div class="col-12 justify-content-around">
+        <button @click="changeEventType('')" class="rounded-pill">All</button>
+        <button @click="changeEventType(eventType)" class="rounded-pill" v-for="eventType in eventTypes"
+          :key="eventType">{{ eventType }}</button>
       </div>
     </section>
     <section class="row">
@@ -14,7 +16,7 @@
 </template>
 
 <script>
-import { computed, onMounted } from 'vue';
+import { computed, onMounted, ref } from 'vue';
 import TowerEventComponent from '../components/TowerEventComponent.vue';
 import { AppState } from '../AppState';
 import { towerEventsService } from '../services/TowerEventsService';
@@ -25,7 +27,8 @@ import { logger } from '../utils/Logger';
 
 export default {
   setup() {
-    const eventType = ['concert', 'convention', 'sport', 'digital']
+    const eventTypes = ['concert', 'convention', 'sport', 'digital']
+    const filteredEventTypes = ref('')
     onMounted(() => {
       getTowerEvents()
     })
@@ -38,10 +41,20 @@ export default {
       }
     }
     return {
-      towerEvents: computed(() => AppState.towerEvents),
+      eventTypes,
+      towerEvents: computed(() => {
+        if (filteredEventTypes.value) {
+          return AppState.towerEvents.filter(
+            pojo => pojo.type == filteredEventTypes.value
+          )
+        } else {
+          return AppState.towerEvents
+        }
+      }),
 
-      async changeEventType() {
-        logger.log('eventType', eventType)
+      async changeEventType(eventType) {
+        logger.log('eventType', eventTypes)
+        filteredEventTypes.value = eventType
       }
     };
   },
