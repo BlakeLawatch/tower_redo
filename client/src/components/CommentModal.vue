@@ -45,7 +45,7 @@ export default {
                     commentData.eventId = route.params.eventId
                     await commentsService.createComment(commentData)
                     editable.value = {}
-                    Modal.getOrCreateInstance('#commentModal')
+                    Modal.getOrCreateInstance('#commentModal').hide()
                 } catch (error) {
                     Pop.error(error)
                 }

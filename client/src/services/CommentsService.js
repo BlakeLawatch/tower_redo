@@ -14,11 +14,13 @@ class CommentsService{
     async createComment(commentData){
         const res = await api.post(`api/comments`, commentData)
         logger.log('comment created', res.data)
+        AppState.comment.push(new Comment(res.data))
     }
 
     async destroyComment(commentId){
         const res = await api.delete(`api/comments/${commentId}`)
         logger.log('deleted comment. STILL FINISH IN THE SERVER', res.data)
+        AppState.comment.splice(0,1)
     }
 }
 
