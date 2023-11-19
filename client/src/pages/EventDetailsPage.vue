@@ -29,9 +29,13 @@
                             class="btn btn-outline-success">Comment</button>
                         <CommentModal />
                     </div>
+                    <div v-for="ticket in tickets" :key="ticket.id">
+                        <p v-if="activeAttendee"> You are attending</p>
+
+                    </div>
                 </section>
                 <section v-for="ticket in tickets" :key="ticket.id">
-                    <img :src="ticket.profile.picture" alt="" :title="ticket.profile.name">
+                    <img class="rounded-circle" :src="ticket.profile.picture" alt="" :title="ticket.profile.name">
                     <p> {{ ticket.profile.name }}</p>
                 </section>
                 <section class="row">
@@ -61,10 +65,11 @@
 import { useRoute } from 'vue-router';
 import Pop from '../utils/Pop';
 import { towerEventsService } from '../services/TowerEventsService';
-import { computed, onMounted } from 'vue';
+import { computed, onMounted, ref } from 'vue';
 import { AppState } from '../AppState'
 import { commentsService } from '../services/CommentsService'
 import { ticketsService } from '../services/TicketsService'
+import { Ticket } from '../models/Ticket';
 
 export default {
     setup() {
@@ -74,6 +79,7 @@ export default {
             getEventTickets()
         })
         const route = useRoute()
+        const attendee = ref({})
 
         async function getEventById() {
             try {
@@ -110,6 +116,16 @@ export default {
             account: computed(() => AppState.account),
             comments: computed(() => AppState.comment),
             tickets: computed(() => AppState.tickets),
+            activeAttendee: computed(() => {
+                if (tickets.profile.id == account.id) {
+                    return AppState.tickets.filter(
+                        pojo => pojo.value = new attendee.value
+                    )
+                } return AppState.tickets
+            }),
+            // if(ticket.profile.id == account.id && ticket.eventId == activeEvent.id){
+            //     return 
+
 
 
             async cancelEvent() {
