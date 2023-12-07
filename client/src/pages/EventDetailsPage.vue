@@ -28,9 +28,10 @@
                         <button data-bs-toggle="modal" data-bs-target="#commentModal"
                             class="btn btn-outline-success">Comment</button>
                         <CommentModal />
+                        <p v-if="activeAttendee">You are attending this event</p>
                     </div>
                     <div v-for="ticket in tickets" :key="ticket.id">
-                        <p v-if="activeAttendee"> You are attending</p>
+
 
                     </div>
                 </section>
@@ -65,11 +66,11 @@
 import { useRoute } from 'vue-router';
 import Pop from '../utils/Pop';
 import { towerEventsService } from '../services/TowerEventsService';
-import { computed, onMounted, ref } from 'vue';
+import { computed, onMounted } from 'vue';
 import { AppState } from '../AppState'
 import { commentsService } from '../services/CommentsService'
 import { ticketsService } from '../services/TicketsService'
-import { Ticket } from '../models/Ticket';
+
 
 export default {
     setup() {
@@ -79,7 +80,7 @@ export default {
             getEventTickets()
         })
         const route = useRoute()
-        const attendee = ref({})
+
 
         async function getEventById() {
             try {
@@ -117,11 +118,13 @@ export default {
             comments: computed(() => AppState.comment),
             tickets: computed(() => AppState.tickets),
             activeAttendee: computed(() => {
-                if (tickets.profile.id == account.id) {
-                    return AppState.tickets.filter(
-                        pojo => pojo.value = new attendee.value
-                    )
-                } return AppState.tickets
+                // if (tickets.profile.id == account.id) {
+                //     return AppState.tickets.filter(
+                //         pojo => pojo.value = new attendee.value
+                //     )
+                // } return AppState.tickets
+                const foundTicket = AppState.tickets.find(ticket => ticket.accountId == AppState.account.id)
+                return foundTicket
             }),
             // if(ticket.profile.id == account.id && ticket.eventId == activeEvent.id){
             //     return 
